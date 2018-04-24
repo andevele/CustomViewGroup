@@ -36,6 +36,8 @@ public class ViewGroupExactly extends ViewGroup {
         int childMeasuredHeight = 0;
 
         int childCount = getChildCount();
+        CustomLayoutParams params = null;
+
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             measureChildWithMargins(child,widthMeasureSpec, 0,heightMeasureSpec,0);
@@ -43,11 +45,10 @@ public class ViewGroupExactly extends ViewGroup {
 
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
-            measureChildWithMargins(child,widthMeasureSpec, 0,heightMeasureSpec,0);
-
-
             childMeasuredWidth = child.getMeasuredWidth();
             childMeasuredHeight = child.getMeasuredHeight();
+            params = (CustomLayoutParams) child.getLayoutParams();
+            
 
         }
 
