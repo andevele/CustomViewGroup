@@ -29,8 +29,6 @@ public class ViewGroupExactly extends ViewGroup {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        measureChildren(widthMeasureSpec, heightMeasureSpec);
-
         int widthAtMost = 0;
         int heightAtMost = 0;
 
@@ -40,6 +38,14 @@ public class ViewGroupExactly extends ViewGroup {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
+            measureChildWithMargins(child,widthMeasureSpec, 0,heightMeasureSpec,0);
+        }
+
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            measureChildWithMargins(child,widthMeasureSpec, 0,heightMeasureSpec,0);
+
+
             childMeasuredWidth = child.getMeasuredWidth();
             childMeasuredHeight = child.getMeasuredHeight();
 
