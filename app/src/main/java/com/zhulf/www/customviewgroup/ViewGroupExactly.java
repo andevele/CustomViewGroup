@@ -2,6 +2,7 @@ package com.zhulf.www.customviewgroup;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -40,15 +41,26 @@ public class ViewGroupExactly extends ViewGroup {
 
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
-            measureChildWithMargins(child,widthMeasureSpec, 0,heightMeasureSpec,0);
-        }
-
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
-            childMeasuredWidth = child.getMeasuredWidth();
-            childMeasuredHeight = child.getMeasuredHeight();
+            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
+//            measureChild(child,widthMeasureSpec,heightMeasureSpec);
             params = (CustomLayoutParams) child.getLayoutParams();
-            
+//            childMeasuredWidth = child.getMeasuredWidth() + params.leftMargin + params.rightMargin;
+            childMeasuredWidth = child.getMeasuredWidth();
+//            childMeasuredHeight = child.getMeasuredHeight() + params.topMargin + params.bottomMargin;
+            childMeasuredHeight = child.getMeasuredHeight();
+//给每一个子元素测量大小
+            if(i == 0) {
+                widthAtMost += childMeasuredWidth + params.leftMargin + params.rightMargin;
+                heightAtMost = childMeasuredHeight + params.topMargin;
+            }
+
+            if(i == 1) {
+                widthAtMost += childMeasuredWidth + params.leftMargin + params.rightMargin;
+                heightAtMost = childMeasuredHeight + params.topMargin;
+            }
+
+            heightAtMost = Math.max(heightAtMost, childMeasuredHeight);
+
 
         }
 
@@ -59,7 +71,33 @@ public class ViewGroupExactly extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int childCount = getChildCount();
 
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            CustomLayoutParams params = (CustomLayoutParams) child.getLayoutParams();
+            int realWidth = child.getMeasuredWidth();
+            int realHeight = child.getMeasuredHeight();
+            int cl = 0;
+            int ct = 0;
+            int cr = 0;
+            int cb = 0;
+//给每个子元素设置布局
+            switch (i) {
+                case 0:
+                    cl = params.leftMargin;
+                    ct = params.topMargin;
+                    break;
+                case 1:
+                    cl = params.leftMargin + 600;
+                    ct = params.topMargin;
+                    break;
+            }
+            cr = cl + realWidth;
+            cb = ct + realHeight;
+
+            child.layout(cl, ct, cr, cb);
+        }
     }
 
     @Override
